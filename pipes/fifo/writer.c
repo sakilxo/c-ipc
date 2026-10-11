@@ -22,5 +22,42 @@ int main(void) {
         return 1;
     }
 
+    printf("writer: waiting for reader \n");
+
+    int fd = open(FIFO_PATH, O_WRONLY);
+
+    if (fd == -1) {
+        perror("open");
+        return 1;
+    }
+
+    printf("writer connected \n");
+    printf("type 'exit' to quit \n");
+
+    while (1) {
+        printf("you: ");
+        fflush(stdout);
+
+        if (fgets(message, sizrof(message), stdin) == NULL) {
+            break;
+        }
+
+        message[strcspn(message, "\n")] = '\0';
+
+        if (strcmp(message, "exit") == 0) {
+            break;
+        }
+
+        if (write(fd, message, strlen(message) +1) == -1) {
+            perror("write");
+            break;
+        }
+    }
+
+    close(fd);
+
+    unlink(FIFO_PATH);
+
+    return 0;
     
 }
