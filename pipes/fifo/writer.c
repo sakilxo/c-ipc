@@ -38,7 +38,7 @@ int main(void) {
         printf("you: ");
         fflush(stdout);
 
-        if (fgets(message, sizrof(message), stdin) == NULL) {
+        if (fgets(message, sizeof(message), stdin) == NULL) {
             break;
         }
 
