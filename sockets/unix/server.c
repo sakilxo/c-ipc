@@ -51,4 +51,59 @@ int main(void) {
         return 1;
     }
 
+
+    if (listen(server_fd, 5) == -1) {   // listen for clients
+        perror("listen");
+        close(server_fd);
+        unlink(SOCKET_PATH);
+        return 1;
+    }
+
+    printf("server: waiting for client. \n");
+
+
+    client_fd = accept(     // accept connection
+        server_fd,
+        NULL,
+        NULL
+    );
+
+    if (client_fd == -1) {
+        perror("accept");
+        close(server_fd);
+        unlink(SOCKET_PATH);
+        return 1;
+    }
+
+    printf("server: client connected. \n");
+
+
+    ssize_t bytes_read = read(      // receive a message
+        client_fd,
+        buffer,
+        sizeof(buffer) -1
+    );
+
+    if (bytes_read > 0) {
+        buffer[bytes_read] = '\0';
+
+        printf("client: %s\n", buffer);
+    }
+
+
+    const char *response = "hello from server";     // send response
+
+    write(
+        client_fd,
+        response,
+        strlen(response) +1
+    );
+
+    close(client_fd);
+    close(server_fd);
+
+    unlink(SOCKET_PATH);
+
+    return 0;
+
 }
