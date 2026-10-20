@@ -29,7 +29,7 @@ int main(void) {
     }
 
 
-    memeset(&address, 0, sizeof(address));      // config server address
+    memset(&address, 0, sizeof(address));      // config server address
 
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
